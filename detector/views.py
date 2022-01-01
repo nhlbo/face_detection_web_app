@@ -18,3 +18,7 @@ def index(request):
             })
     form = DetectForm()
     return render(request, 'index.html', {'form': form})
+
+
+def about(request):
+    return render(request, 'about.html')

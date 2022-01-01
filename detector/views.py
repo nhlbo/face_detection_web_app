@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from darknet import model
 from .forms import DetectForm
 
 
@@ -7,10 +8,17 @@ def index(request):
     if request.method == 'POST':
         form = DetectForm(request.POST, request.FILES)
         if form.is_valid():
+            img = form.cleaned_data['file']
+            confidence_threshold = form.cleaned_data['threshold']
+            img, predicted_time = model.detect(img, confidence_threshold)
             return render(request, 'index.html', {
                 'form': form,
-                'src': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png'
-                       '/640px-Image_created_with_a_mobile_phone.png'
+                'src': img,
+                'predicted_time': predicted_time
             })
     form = DetectForm()
     return render(request, 'index.html', {'form': form})
+
+
+def about(request):
+    return render(request, 'about.html')

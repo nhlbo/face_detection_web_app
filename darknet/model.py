@@ -1,6 +1,6 @@
 import base64
-import tempfile
 import time
+from binascii import b2a_base64
 
 import cv2
 import numpy as np
@@ -25,12 +25,14 @@ def load_model():
 
 
 def detect(img, confidence_threshold):
-    tmp = tempfile.NamedTemporaryFile(delete=True)
-    with open(tmp.name, 'wb+') as destination:
-        for chunk in img.chunks():
-            destination.write(chunk)
+    img_base64 = ''
+    for chunk in img.chunks():
+        img_base64 += b2a_base64(chunk).decode().strip()
 
-    image = cv2.imread(tmp.name)
+    im_bytes = base64.b64decode(img_base64)
+    im_arr = np.frombuffer(im_bytes, dtype=np.uint8)
+    image = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
+
     (H, W) = image.shape[:2]
 
     ln = net.getLayerNames()

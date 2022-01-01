@@ -30,7 +30,9 @@
 
 <main class="container">
     {% if src %}
-        <img src={{ src }} class="img-fluid" alt="predicted-image">
+        <div class="container">
+            <img src="data:image/png;base64,{{ src }}" class="img-fluid" alt="predicted-image">
+        </div>
     {% endif %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -43,10 +45,10 @@
             <div class="row g-2">
                 <div class="row g-2 col-md">
                     <div class="col-md">
-                        <label for="customRange1" class="form-label">Probability threshold</label>
+                        <label for="customRange1" class="form-label">Confidence threshold</label>
                     </div>
                     <div class="col-md">
-                        <p id="threshold"></p>
+                        <p id="threshold">1</p>
                     </div>
                 </div>
                 <div class="col-md">

@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from darknet import model
 
 
 def main():
@@ -19,4 +20,5 @@ def main():
 
 
 if __name__ == '__main__':
+    model.load_model()
     main()

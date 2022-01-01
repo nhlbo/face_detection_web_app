@@ -13,7 +13,8 @@ def index(request):
             img, predicted_time = model.detect(img, confidence_threshold)
             return render(request, 'index.html', {
                 'form': form,
-                'src': img
+                'src': img,
+                'predicted_time': predicted_time
             })
     form = DetectForm()
     return render(request, 'index.html', {'form': form})

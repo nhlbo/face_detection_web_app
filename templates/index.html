@@ -32,6 +32,7 @@
     {% if src %}
         <div class="container">
             <img src="data:image/png;base64,{{ src }}" class="img-fluid" alt="predicted-image">
+            <p>Predicted time: {{ predicted_time|floatformat:2 }} seconds</p>
         </div>
     {% endif %}
     <form method="post" enctype="multipart/form-data">

@@ -26,7 +26,6 @@ def load_model():
 
 def detect(img, confidence_threshold):
     tmp = tempfile.NamedTemporaryFile(delete=True)
-    print(tmp.name)
     with open(tmp.name, 'wb+') as destination:
         for chunk in img.chunks():
             destination.write(chunk)

@@ -25,12 +25,13 @@ def load_model():
 
 
 def detect(img, confidence_threshold):
-    tmp = tempfile.NamedTemporaryFile(delete=True)
-    with open(tmp.name, 'wb+') as destination:
+    #tmp = tempfile.NamedTemporaryFile(delete=True)
+
+    with open('abc', 'wb+') as destination:
         for chunk in img.chunks():
             destination.write(chunk)
 
-    image = cv2.imread(tmp.name)
+    image = cv2.imread('abc')
     (H, W) = image.shape[:2]
 
     ln = net.getLayerNames()

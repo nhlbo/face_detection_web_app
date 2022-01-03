@@ -24,7 +24,7 @@ WEIGHTS_FILE_2 = 'darknet/weights/yolov4-custom.weights'
 
 def load_model():
     global net_1, LABELS_1, COLORS_1, net_2, LABELS_2, COLORS_2
-    np.random.seed(4)
+    np.random.seed(5)
     LABELS_1 = open(LABELS_FILE_1).read().strip().split("\n")
     COLORS_1 = np.random.randint(0, 255, size=(len(LABELS_1), 3), dtype="uint8")
     net_1 = cv2.dnn.readNetFromDarknet(CONFIG_FILE_1, WEIGHTS_FILE_1)
@@ -76,8 +76,7 @@ def detect_1(img, confidence_threshold):
                 confidences.append(float(confidence))
                 classIDs.append(classID)
 
-    idxs = cv2.dnn.NMSBoxes(boxes, confidences, confidence_threshold,
-                            confidence_threshold)
+    idxs = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 
     if len(idxs) > 0:
         for i in idxs.flatten():
@@ -89,7 +88,7 @@ def detect_1(img, confidence_threshold):
             cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
             text = "{}: {:.4f}".format(LABELS_1[classIDs[i]], confidences[i])
             cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.5, color, 2)
+                        1, color, 1)
 
     retval, buffer = cv2.imencode('.jpg', image)
     jpg_as_text = base64.b64encode(buffer)

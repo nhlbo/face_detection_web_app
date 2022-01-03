@@ -20,3 +20,4 @@ venv.bak/
 
 # weights
 yolov3.weights
+yolov4-custom.weights

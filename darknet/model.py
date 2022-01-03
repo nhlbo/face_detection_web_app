@@ -14,12 +14,12 @@ LABELS_2 = None
 COLORS_2 = None
 
 LABELS_FILE_1 = 'darknet/data/coco.names'
-CONFIG_FILE_1 = 'darknet/cfg/yolov3_320x320.cfg'
+CONFIG_FILE_1 = 'darknet/cfg/yolov3.cfg'
 WEIGHTS_FILE_1 = 'darknet/weights/yolov3.weights'
 
-LABELS_FILE_2 = 'darknet/data/coco.names'
-CONFIG_FILE_2 = 'darknet/cfg/yolov3_320x320.cfg'
-WEIGHTS_FILE_2 = 'darknet/weights/yolov3.weights'
+LABELS_FILE_2 = 'darknet/data/custom.names'
+CONFIG_FILE_2 = 'darknet/cfg/yolov4-custom.cfg'
+WEIGHTS_FILE_2 = 'darknet/weights/yolov4-custom.weights'
 
 
 def load_model():

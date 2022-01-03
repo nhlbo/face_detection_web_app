@@ -14,23 +14,17 @@
     <main class="container">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="container">
+            <div class="container col-md-7">
                 <div class="row g-2">
-                    <div class="row g-2 col-md">
-                        <div class="col-md">
-                            <label for="customRange1" class="form-label">Confidence threshold</label>
-                        </div>
-                        <div class="col-md">
-                            <p id="threshold">1</p>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <input type="range" class="form-range" min="0" max="1" step="0.01" value="0.8" name="threshold"
+                    <label for="customRange1" class="form-label">Confidence threshold</label>
+                    <div class="col g-2 d-flex justify-content-between">
+                        <input type="range" class="form-range d-inline-block me-3" min="0" max="1" step="0.01" value="0.8" name="threshold"
                                id="customRange1">
+                        <p id="threshold" class="d-inline-block">1</p>
                     </div>
                 </div>
             </div>
-            <div class="container">
+            <div class="container col-md-7">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="model" id="flexRadioDefault1" value="1" checked>
                     <label class="form-check-label" for="flexRadioDefault1">
@@ -44,8 +38,8 @@
                     </label>
                 </div>
             </div>
-            <div class="container col-md-6 py-5">
-                <div class="mb-5  ">
+            <div class="container col-md-7 py-4">
+                <div class="mb-5">
                     {{ form.file }}
                     <div class="d-flex bd-highlight justify-content-between">
 

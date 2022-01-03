@@ -9,19 +9,29 @@ net = None
 LABELS = None
 COLORS = None
 
-INPUT_FILE = 'data/dog.jpg'
-OUTPUT_FILE = 'predicted.jpg'
+net_2 = None
+LABELS_2 = None
+COLORS_2 = None
+
 LABELS_FILE = 'darknet/data/coco.names'
 CONFIG_FILE = 'darknet/cfg/yolov3_320x320.cfg'
 WEIGHTS_FILE = 'darknet/weights/yolov3.weights'
 
+LABELS_FILE_2 = 'darknet/data/coco.names'
+CONFIG_FILE_2 = 'darknet/cfg/yolov3_320x320.cfg'
+WEIGHTS_FILE_2 = 'darknet/weights/yolov3.weights'
+
 
 def load_model():
-    global net, LABELS, COLORS
+    global net, LABELS, COLORS, net_2, LABELS_2, COLORS_2
     np.random.seed(4)
     LABELS = open(LABELS_FILE).read().strip().split("\n")
     COLORS = np.random.randint(0, 255, size=(len(LABELS), 3), dtype="uint8")
     net = cv2.dnn.readNetFromDarknet(CONFIG_FILE, WEIGHTS_FILE)
+
+    LABELS_2 = open(LABELS_FILE_2).read().strip().split("\n")
+    COLORS_2 = np.random.randint(0, 255, size=(len(LABELS_2), 3), dtype="uint8")
+    net_2 = cv2.dnn.readNetFromDarknet(CONFIG_FILE_2, WEIGHTS_FILE_2)
 
 
 def detect(img, confidence_threshold):

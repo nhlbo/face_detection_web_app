@@ -10,6 +10,7 @@ class DetectForm(forms.Form):
             'class': 'form-control',
             'type': 'file',
             'name': 'file',
+            'accept': '.jpg,.jpeg,.png',
             'onchange': 'preview()'
         }
     ))

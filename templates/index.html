@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="p-4 p-md-5 mb-4 text-white rounded bg-secondary">
+    <div class="p-4 p-md-5 mb-4 text-white bg-secondary">
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">FACE RECOGNITION</h1>
             <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and
@@ -18,7 +18,8 @@
                 <div class="row g-2">
                     <label for="customRange1" class="form-label">Confidence threshold</label>
                     <div class="col g-2 d-flex justify-content-between">
-                        <input type="range" class="form-range d-inline-block me-3" min="0" max="1" step="0.01" value="0.8" name="threshold"
+                        <input type="range" class="form-range d-inline-block me-3" min="0" max="1" step="0.01"
+                               value="0.8" name="threshold"
                                id="customRange1">
                         <p id="threshold" class="d-inline-block">1</p>
                     </div>
@@ -41,21 +42,20 @@
             <div class="container col-md-7 py-4">
                 <div class="mb-5">
                     {{ form.file }}
-                    <div class="d-flex bd-highlight justify-content-between">
-
+                    <div class="d-flex bd-highlight justify-content-between mb-4">
                         <button onclick="clearImage()" class="btn btn-primary mt-3" id="clearImg">Clear picture</button>
                         <button type="submit" class="btn btn-primary mt-3" style="width: 18%" id="detectImg">Detect
                         </button>
                     </div>
-                    {% if src %}
-                        <div class="container">
-                            <img id="frame" src="data:image/png;base64,{{ src }}" class="img-fluid mx-auto d-block"
+                    <div class="container">
+                        {% if src %}
+                            <img id="frame" src="data:image/png;base64,{{ src }}" class="img-fluid mx-auto d-block mb-2"
                                  alt="predicted-image">
-                            <p>Predicted time: {{ predicted_time|floatformat:2 }} seconds</p>
-                        </div>
-                    {% else %}
-                        <img id="frame" src="" class="img-fluid mx-auto d-block"/>
-                    {% endif %}
+                            <p id="predicted_time" class="text-center">Predicted time: {{ predicted_time|floatformat:2 }} seconds</p>
+                        {% else %}
+                            <img id="frame" src="" class="img-fluid mx-auto d-block"/>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </form>
@@ -73,8 +73,8 @@
 
         threshold.innerHTML = Number(slider.value).toFixed(2);
 
-        slider.oninput = function() {
-          threshold.innerHTML = Number(this.value).toFixed(2);
+        slider.oninput = function () {
+            threshold.innerHTML = Number(this.value).toFixed(2);
         }
 
         let btn_detect = document.getElementById('detectImg');
@@ -83,6 +83,7 @@
         function preview() {
             frame.src = URL.createObjectURL(event.target.files[0]);
             disBtn();
+            document.getElementById('predicted_time').innerHTML = "";
         }
 
         function disBtn() {

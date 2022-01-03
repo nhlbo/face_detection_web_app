@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
     <div class="p-4 p-md-5 mb-4 text-white rounded bg-secondary">
         <div class="col-md-6 px-0">
@@ -65,37 +66,37 @@
             </div>
         </form>
     </main>
-
-    {% load static %}
-    <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
-    <script>
-        var btn_detect = document.getElementById('detectImg');
-        var btn_clearImg = document.getElementById('clearImg');
-
-        function preview() {
-            frame.src = URL.createObjectURL(event.target.files[0]);
-            disBtn();
-        }
-
-        function disBtn() {
-            btn_detect.style.display = "inline";
-            btn_clearImg.style.display = "inline";
-        }
-
-        function initBtn() {
-            btn_detect.style.display = "None";
-            btn_clearImg.style.display = "None";
-        }
-
-        function clearImage() {
-            document.getElementById('formFile').value = null;
-            frame.src = "";
-        }
-
-        initBtn();
-    </script>
 {% endblock %}
 
 {% block footer %}
     <li class="nav-item"><a href="/about" class="nav-link px-2 text-muted">About</a></li>
 {% endblock %}
+
+{% load static %}
+<script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+<script>
+    var btn_detect = document.getElementById('detectImg');
+    var btn_clearImg = document.getElementById('clearImg');
+
+    function preview() {
+        frame.src = URL.createObjectURL(event.target.files[0]);
+        disBtn();
+    }
+
+    function disBtn() {
+        btn_detect.style.display = "inline";
+        btn_clearImg.style.display = "inline";
+    }
+
+    function initBtn() {
+        btn_detect.style.display = "None";
+        btn_clearImg.style.display = "None";
+    }
+
+    function clearImage() {
+        document.getElementById('formFile').value = null;
+        frame.src = "";
+    }
+
+    initBtn();
+</script>

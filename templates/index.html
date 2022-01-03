@@ -50,7 +50,7 @@
                     <div class="container">
                         {% if src %}
                             <img id="frame" src="data:image/png;base64,{{ src }}" class="img-fluid mx-auto d-block mb-2"
-                                 alt="predicted-image">
+                                 >
                             <p id="predicted_time" class="text-center">Predicted time: {{ predicted_time|floatformat:2 }} seconds</p>
                         {% else %}
                             <img id="frame" src="" class="img-fluid mx-auto d-block"/>

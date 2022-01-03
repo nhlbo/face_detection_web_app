@@ -115,17 +115,17 @@
 
         function preview() {
             frame.src = URL.createObjectURL(event.target.files[0]);
-            disBtn();
+            showBtn();
             document.getElementById('predicted_time').innerHTML = "";
 
         }
 
-        function disBtn() {
+        function showBtn() {
             btn_detect.style.display = "inline";
             btn_clearImg.style.display = "inline";
         }
 
-        function initBtn() {
+        function hideBtn() {
             btn_detect.style.display = "None";
             btn_clearImg.style.display = "None";
         }
@@ -133,8 +133,9 @@
         function clearImage() {
             document.getElementById('formFile').value = null;
             frame.src = "";
+            hideBtn();
         }
 
-        initBtn();
+        hideBtn();
     </script>
 {% endblock %}

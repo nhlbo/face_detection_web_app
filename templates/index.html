@@ -70,10 +70,17 @@
     <script>
         let slider = document.getElementById("customRange1");
         let threshold = document.getElementById("threshold");
-        var value_threshold = localStorage.getItem('threshold');
+
+        let value_threshold = localStorage.getItem('threshold');
 
         let field1_check = document.getElementById("flexRadioDefault1").checked;
         let field2_check = document.getElementById("flexRadioDefault2").checked;
+
+        if (value_threshold == null) {
+            value_threshold = 0.8;
+            localStorage.setItem('threshold', 0.8);
+            localStorage.setItem('field2', 'true');
+        }
 
         window.onload = (event) => {
             document.querySelector('#customRange1').value = value_threshold;
@@ -86,13 +93,13 @@
         };
 
         function fieldCheck1(){
-            field1_check = localStorage.setItem('field1', 'true');
-            field2_check = localStorage.setItem('field2', 'false');
+            localStorage.setItem('field1', 'true');
+            localStorage.setItem('field2', 'false');
         }
 
         function fieldCheck2(){
-            field1_check = localStorage.setItem('field1', 'false');
-            field2_check = localStorage.setItem('field2', 'true');
+            localStorage.setItem('field1', 'false');
+            localStorage.setItem('field2', 'true');
         }
 
         threshold.innerHTML = value_threshold;

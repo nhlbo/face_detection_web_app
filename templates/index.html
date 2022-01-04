@@ -1,188 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>Face recognition</title>
-    {% load static %}
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+{% extends "base.html" %}
 
-</head>
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Face Recognition</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            <div class="navbar-collapse collapse show" id="ftco-nav" style="">
-                <ul class="navbar-nav m-auto">
-                    <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="/about" class="nav-link">About us</a></li>
-                </ul>
-            </div>
-        </div>
-      </nav>
-    </header>
-    <div class="p-4 p-md-5 mb-4 text-white rounded bg-secondary">
+{% block content %}
+    <div class="p-4 p-md-5 mb-4 text-white bg-secondary">
         <div class="col-md-6 px-0">
-          <h1 class="display-4 fst-italic">FACE RECOGNITION</h1>
-          <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+            <h1 class="display-4 fst-italic">FACE RECOGNITION</h1>
+            <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and
+                efficiently
+                about what’s most interesting in this post’s contents.</p>
         </div>
-      </div>
+    </div>
     <body class="d-flex flex-column min-vh-100">
 
-       <!-- <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">Face Recognition</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                {#        <div class="collapse navbar-collapse" id="navbarCollapse">#}
-                {#            <ul class="navbar-nav me-auto mb-2 mb-md-0">#}
-                {#                <li class="nav-item">#}
-                {#                    <a class="nav-link active" aria-current="page" href="/detect">Detect</a>#}
-                {#                </li>#}
-                {#            </ul>#}
-                {#        </div>#}
+    <main class="container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container col-md-7">
+                <div class="row g-2">
+                    <label for="customRange1" class="form-label">Confidence threshold</label>
+                    <div class="col g-2 d-flex justify-content-between">
+                        <input type="range" class="form-range d-inline-block me-3" min="0" max="1" step="0.01"
+                               value="" name="threshold"
+                               id="customRange1">
+                        <p id="threshold" class="d-inline-block">1</p>
+                    </div>
+                </div>
             </div>
-        </nav> -->
-
-        <main class="container">
-            {% if src %}
-                <div class="container">
-                    <img src="data:image/png;base64,{{ src }}" class="img-fluid" alt="predicted-image">
-                    <p>Predicted time: {{ predicted_time|floatformat:2 }} seconds</p>
+            <div class="container col-md-7">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="model" id="flexRadioDefault1" value="1" checked onclick="fieldCheck1()">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Pretrained model
+                    </label>
                 </div>
-            {% endif %}
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                 <div class="container">
-                    <div class="row g-2">
-                        <div class="row g-2 col-md">
-                            <div class="col-md">
-                                <label for="customRange1" class="form-label">Confidence threshold</label>
-                            </div>
-                            <div class="col-md">
-                                <p id="threshold">1</p>
-                            </div>
-                        </div>
-                        <div class="col-md">
-                            <input type="range" class="form-range" min="0" max="1" step="0.01" value="0.8" name="threshold"
-                                   id="customRange1">
-                        </div>
-                    </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="model" id="flexRadioDefault2" value="2" onclick="fieldCheck2()">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Custom model
+                    </label>
                 </div>
-                <div class="container">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="model" id="flexRadioDefault1" value="1" checked>
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Pretrained model
-                        </label>
+            </div>
+            <div class="container col-md-7 py-4">
+                <div class="mb-5">
+                    {{ form.file }}
+                    <div class="d-flex bd-highlight justify-content-between mb-4">
+                        <button onclick="clearImage()" class="btn btn-primary mt-3" id="clearImg">Clear picture</button>
+                        <button type="submit" class="btn btn-primary mt-3" style="width: 18%" id="detectImg">Detect
+                        </button>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="model" id="flexRadioDefault2" value="2">
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            Custom model
-                        </label>
+                    <div class="container">
+                        {% if src %}
+                            <img id="frame" src="data:image/png;base64,{{ src }}" class="img-fluid mx-auto d-block mb-2"
+                                 >
+                            <p id="predicted_time" class="text-center">Predicted time: {{ predicted_time|floatformat:2 }} seconds</p>
+                        {% else %}
+                            <img id="frame" src="" class="img-fluid mx-auto d-block"/>
+                        {% endif %}
                     </div>
                 </div>
-                <!--<button type="submit" class="btn btn-primary mt-5" style="width: 15%" id="detectImg2">Detect</button>-->
-                <div class="container col-md-6 py-5">
-                    <div class="mb-5  ">
-                        <input class="form-control" type="file" id="formFile" onchange="preview()">
-                        <div class="d-flex bd-highlight justify-content-between">
+            </div>
+        </form>
+    </main>
+{% endblock %}
 
-                            <button onclick="clearImage()" class="btn btn-primary mt-3" id="clearImg">Clear picture</button>
-                            <button type="submit" class="btn btn-primary mt-3"  style="width: 18%" id="detectImg">Detect</button>
-                        </div>
+{% block footer %}
+    <li class="nav-item"><a href="/about" class="nav-link px-2 text-muted">About</a></li>
+{% endblock %}
 
-                    </div>
-                    <img id="frame" src="" class="img-fluid mx-auto d-block" />
-                </div>
-                <!--<div class="bg-light p-5 rounded">
-                    <div class="mb-3">
+{% block scripts %}
+    <script>
+        let slider = document.getElementById("customRange1");
+        let threshold = document.getElementById("threshold");
 
-                        {{ form.file }}
-                    </div>
-                </div> -->
+        let value_threshold = localStorage.getItem('threshold');
 
-            </form>
+        let field1_check = document.getElementById("flexRadioDefault1").checked;
+        let field2_check = document.getElementById("flexRadioDefault2").checked;
 
-        </main>
-       <!-- here -->
-        <div class="container mt-auto">
-            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-                <p class="col-md-4 mb-0 text-muted">&copy; 2021 Face Recognition</p>
-                <ul class="nav col-md-4 justify-content-end">
-                    <li class="nav-item"><a href="/about" class="nav-link px-2 text-muted">About</a></li>
-                </ul>
-            </footer>
-        </div>
-        <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
-        <script>
-            var btn_detect = document.getElementById('detectImg');
-            var btn_clearImg = document.getElementById('clearImg');
+        if (value_threshold == null) {
+            value_threshold = 0.8;
+            localStorage.setItem('threshold', 0.8);
+            localStorage.setItem('field2', 'true');
+        }
 
-            function preview() {
-                frame.src = URL.createObjectURL(event.target.files[0]);
-                disBtn();
-            }
+        window.onload = (event) => {
+            document.querySelector('#customRange1').value = value_threshold;
 
-            function disBtn(){
-                btn_detect.style.display = "inline";
-                btn_clearImg.style.display = "inline";
-            }
-            function initBtn(){
-                btn_detect.style.display = "None";
-                btn_clearImg.style.display = "None";
-            }
+            field1_check = (localStorage.getItem('field1') === 'true');
+            field2_check = (localStorage.getItem('field2') === 'true');
 
+            document.querySelector('#flexRadioDefault1').checked = field1_check;
+            document.querySelector('#flexRadioDefault2').checked = field2_check;
+        };
 
-            function clearImage() {
-                document.getElementById('formFile').value = null;
-                frame.src = "";
-            }
-            function setCookie(cname, cvalue, exdays) {
-              const d = new Date();
-              d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-              let expires = "expires="+d.toUTCString();
-              document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-            }
+        function fieldCheck1(){
+            localStorage.setItem('field1', 'true');
+            localStorage.setItem('field2', 'false');
+        }
 
-            function getCookie(cname) {
-              let name = cname + "=";
-              let ca = document.cookie.split(';');
-              for(let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                  c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                  return c.substring(name.length, c.length);
-                }
-              }
+        function fieldCheck2(){
+            localStorage.setItem('field1', 'false');
+            localStorage.setItem('field2', 'true');
+        }
 
-              return "";
-            }
+        threshold.innerHTML = value_threshold;
 
-            function checkCookie() {
-              let user = getCookie("username");
-              if (user != "") {
-                alert("Welcome again " + user);
-              } else {
-                user = prompt("Please enter your name:", "");
-                if (user != "" && user != null) {
-                  setCookie("username", user, 365);
-                }
-              }
-            }
+        slider.oninput = function () {
+            var cur_value = Number(this.value).toFixed(2);
+            threshold.innerHTML = cur_value;
+            localStorage.setItem('threshold', cur_value);
+        }
 
-            initBtn();
-        </script>
-    </body>
-</html>
+        let btn_detect = document.getElementById('detectImg');
+        let btn_clearImg = document.getElementById('clearImg');
+
+        function preview() {
+            frame.src = URL.createObjectURL(event.target.files[0]);
+            showBtn();
+            document.getElementById('predicted_time').innerHTML = "";
+
+        }
+
+        function showBtn() {
+            btn_detect.style.display = "inline";
+            btn_clearImg.style.display = "inline";
+        }
+
+        function hideBtn() {
+            btn_detect.style.display = "None";
+            btn_clearImg.style.display = "None";
+        }
+
+        function clearImage() {
+            document.getElementById('formFile').value = null;
+            frame.src = "";
+            hideBtn();
+        }
+
+        hideBtn();
+    </script>
+{% endblock %}

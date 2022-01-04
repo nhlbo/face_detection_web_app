@@ -1,30 +1,57 @@
 import base64
 import time
 from binascii import b2a_base64
+import logging
 
 import cv2
 import numpy as np
 
-net = None
-LABELS = None
-COLORS = None
+net_1 = None
+LABELS_1 = None
+COLORS_1 = None
 
-INPUT_FILE = 'data/dog.jpg'
-OUTPUT_FILE = 'predicted.jpg'
-LABELS_FILE = 'darknet/data/coco.names'
-CONFIG_FILE = 'darknet/cfg/yolov3_320x320.cfg'
-WEIGHTS_FILE = 'darknet/weights/yolov3.weights'
+net_2 = None
+LABELS_2 = None
+COLORS_2 = None
+
+logger = logging.getLogger(__name__)
+
+LABELS_FILE_1 = 'darknet/data/coco.names'
+CONFIG_FILE_1 = 'darknet/cfg/yolov3.cfg'
+WEIGHTS_FILE_1 = 'darknet/weights/yolov3.weights'
+
+LABELS_FILE_2 = 'darknet/data/custom.names'
+CONFIG_FILE_2 = 'darknet/cfg/yolov3_custom.cfg'
+WEIGHTS_FILE_2 = 'darknet/weights/yolov3_10000.weights'
 
 
 def load_model():
-    global net, LABELS, COLORS
-    np.random.seed(4)
-    LABELS = open(LABELS_FILE).read().strip().split("\n")
-    COLORS = np.random.randint(0, 255, size=(len(LABELS), 3), dtype="uint8")
-    net = cv2.dnn.readNetFromDarknet(CONFIG_FILE, WEIGHTS_FILE)
+    global net_1, LABELS_1, COLORS_1, net_2, LABELS_2, COLORS_2
+    np.random.seed(5)
+
+    LABELS_1 = open(LABELS_FILE_1).read().strip().split("\n")
+    COLORS_1 = np.random.randint(0, 255, size=(len(LABELS_1), 3), dtype="uint8")
+    net_1 = cv2.dnn.readNetFromDarknet(CONFIG_FILE_1, WEIGHTS_FILE_1)
+    logger.info('model 1 loaded')
+
+    LABELS_2 = open(LABELS_FILE_2).read().strip().split("\n")
+    COLORS_2 = np.random.randint(0, 255, size=(len(LABELS_2), 3), dtype="uint8")
+    net_2 = cv2.dnn.readNetFromDarknet(CONFIG_FILE_2, WEIGHTS_FILE_2)
+    logger.info('model 2 loaded')
 
 
-def detect(img, confidence_threshold):
+def detect(img, confidence_threshold, choice):
+    if choice == '1':
+        net = net_1
+        COLORS_T = COLORS_1
+        LABELS_T = LABELS_1
+    else:
+        net = net_2
+        COLORS_T = COLORS_2
+        LABELS_T = LABELS_2
+
+    logger.info('predicting image')
+
     img_base64 = ''
     for chunk in img.chunks():
         img_base64 += b2a_base64(chunk).decode().strip()
@@ -66,20 +93,19 @@ def detect(img, confidence_threshold):
                 confidences.append(float(confidence))
                 classIDs.append(classID)
 
-    idxs = cv2.dnn.NMSBoxes(boxes, confidences, confidence_threshold,
-                            confidence_threshold)
+    idxs = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 
     if len(idxs) > 0:
         for i in idxs.flatten():
             (x, y) = (boxes[i][0], boxes[i][1])
             (w, h) = (boxes[i][2], boxes[i][3])
 
-            color = [int(c) for c in COLORS[classIDs[i]]]
+            color = [int(c) for c in COLORS_T[classIDs[i]]]
 
             cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-            text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
-            cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.5, color, 2)
+            text = "{}: {:.4f}".format(LABELS_T[classIDs[i]], confidences[i])
+            cv2.putText(image, text, (x, y + 30), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.9, color, 1)
 
     retval, buffer = cv2.imencode('.jpg', image)
     jpg_as_text = base64.b64encode(buffer)

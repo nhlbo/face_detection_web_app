@@ -11,10 +11,7 @@ def index(request):
             img = form.cleaned_data['file']
             choice = form.cleaned_data['model']
             confidence_threshold = form.cleaned_data['threshold']
-            if choice == '1':
-                img, predicted_time = model.detect_1(img, confidence_threshold)
-            else:
-                img, predicted_time = model.detect_2(img, confidence_threshold)
+            img, predicted_time = model.detect(img, confidence_threshold, choice)
             return render(request, 'index.html', {
                 'form': form,
                 'src': img,

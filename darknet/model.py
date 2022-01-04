@@ -1,6 +1,7 @@
 import base64
 import time
 from binascii import b2a_base64
+import logging
 
 import cv2
 import numpy as np
@@ -12,6 +13,8 @@ COLORS_1 = None
 net_2 = None
 LABELS_2 = None
 COLORS_2 = None
+
+logger = logging.getLogger(__name__)
 
 LABELS_FILE_1 = 'darknet/data/coco.names'
 CONFIG_FILE_1 = 'darknet/cfg/yolov3.cfg'
@@ -29,10 +32,12 @@ def load_model():
     LABELS_1 = open(LABELS_FILE_1).read().strip().split("\n")
     COLORS_1 = np.random.randint(0, 255, size=(len(LABELS_1), 3), dtype="uint8")
     net_1 = cv2.dnn.readNetFromDarknet(CONFIG_FILE_1, WEIGHTS_FILE_1)
+    logger.info('model 1 loaded')
 
     LABELS_2 = open(LABELS_FILE_2).read().strip().split("\n")
     COLORS_2 = np.random.randint(0, 255, size=(len(LABELS_2), 3), dtype="uint8")
     net_2 = cv2.dnn.readNetFromDarknet(CONFIG_FILE_2, WEIGHTS_FILE_2)
+    logger.info('model 2 loaded')
 
 
 def detect(img, confidence_threshold, choice):
@@ -44,6 +49,8 @@ def detect(img, confidence_threshold, choice):
         net = net_2
         COLORS_T = COLORS_2
         LABELS_T = LABELS_2
+
+    logger.info('predicting image')
 
     img_base64 = ''
     for chunk in img.chunks():

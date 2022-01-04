@@ -70,7 +70,6 @@ def detect(img, confidence_threshold, choice):
     classIDs = []
 
     for output in layerOutputs:
-        print(f'output = {output.shape}')
         for detection in output:
             scores = detection[5:]
             classID = np.argmax(scores)

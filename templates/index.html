@@ -4,9 +4,8 @@
     <div class="p-4 p-md-5 mb-4 text-white bg-secondary">
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">FACE RECOGNITION</h1>
-            <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and
-                efficiently
-                about what’s most interesting in this post’s contents.</p>
+            <p class="lead my-3">"The best way to enhance security is through facial recognition — it’s going to be the
+                standard very soon." Kesha Williams</p>
         </div>
     </div>
     <body class="d-flex flex-column min-vh-100">
@@ -27,13 +26,15 @@
             </div>
             <div class="container col-md-7">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="model" id="flexRadioDefault1" value="1" checked onclick="fieldCheck1()">
+                    <input class="form-check-input" type="radio" name="model" id="flexRadioDefault1" value="1" checked
+                           onclick="fieldCheck1()">
                     <label class="form-check-label" for="flexRadioDefault1">
                         Pretrained model
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="model" id="flexRadioDefault2" value="2" onclick="fieldCheck2()">
+                    <input class="form-check-input" type="radio" name="model" id="flexRadioDefault2" value="2"
+                           onclick="fieldCheck2()">
                     <label class="form-check-label" for="flexRadioDefault2">
                         Custom model
                     </label>
@@ -50,13 +51,21 @@
                     <div class="container">
                         {% if src %}
                             <img id="frame" src="data:image/png;base64,{{ src }}" class="img-fluid mx-auto d-block mb-2"
-                                 >
-                            <p id="predicted_time" class="text-center">Predicted time: {{ predicted_time|floatformat:2 }} seconds</p>
+                            >
+                            <p id="predicted_time" class="text-center">Predicted
+                                time: {{ predicted_time|floatformat:2 }} seconds</p>
                         {% else %}
                             <img id="frame" src="" class="img-fluid mx-auto d-block"/>
                         {% endif %}
                     </div>
                 </div>
+                {% if result %}
+                    <div class="mb-5">
+                        {% for t in result %}
+                            <p>{{ t.obj }}: {{ t.prob|floatformat:2 }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         </form>
     </main>
@@ -92,12 +101,12 @@
             document.querySelector('#flexRadioDefault2').checked = field2_check;
         };
 
-        function fieldCheck1(){
+        function fieldCheck1() {
             localStorage.setItem('field1', 'true');
             localStorage.setItem('field2', 'false');
         }
 
-        function fieldCheck2(){
+        function fieldCheck2() {
             localStorage.setItem('field1', 'false');
             localStorage.setItem('field2', 'true');
         }

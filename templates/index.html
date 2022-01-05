@@ -62,7 +62,10 @@
                 {% if result %}
                     <div class="mb-5">
                         {% for t in result %}
-                            <p>{{ t.obj }}: {{ t.prob|floatformat:2 }}</p>
+                            <p style="font-weight: bold;text-align: center; color: #668ad8;  border: block 2px #668ad8;  background: #f1f8ff;  padding: 0.5em 0.5em 0.5em 2em;">
+
+                                {{ t.obj }}: {{ t.prob|floatformat:2 }}
+                            </p>
                         {% endfor %}
                     </div>
                 {% endif %}

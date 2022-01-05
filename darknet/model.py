@@ -94,7 +94,7 @@ def detect(img, confidence_threshold, choice):
                 classIDs.append(classID)
 
     idxs = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
-
+    result = []
     if len(idxs) > 0:
         for i in idxs.flatten():
             (x, y) = (boxes[i][0], boxes[i][1])
@@ -103,10 +103,14 @@ def detect(img, confidence_threshold, choice):
             color = [int(c) for c in COLORS_T[classIDs[i]]]
 
             cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-            text = "{}: {:.4f}".format(LABELS_T[classIDs[i]], confidences[i])
-            cv2.putText(image, text, (x, y + 30), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.9, color, 1)
+            text = "{}: {:.2f}".format(LABELS_T[classIDs[i]], confidences[i])
+            cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.6, color, 2)
+            result.append({
+                'obj': LABELS_T[classIDs[i]],
+                'prob': confidences[i]
+            })
 
     retval, buffer = cv2.imencode('.jpg', image)
     jpg_as_text = base64.b64encode(buffer)
-    return jpg_as_text.decode(), end - start
+    return jpg_as_text.decode(), end - start, result

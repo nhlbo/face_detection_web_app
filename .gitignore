@@ -19,5 +19,5 @@ env.bak/
 venv.bak/
 
 # weights
-yolov3.weights
-yolov3_final.weights
+#yolov3.weights
+#yolov3_final.weights

@@ -22,7 +22,7 @@ WEIGHTS_FILE_1 = 'darknet/weights/yolov3.weights'
 
 LABELS_FILE_2 = 'darknet/data/custom.names'
 CONFIG_FILE_2 = 'darknet/cfg/yolov3_custom.cfg'
-WEIGHTS_FILE_2 = 'darknet/weights/yolov3_10000.weights'
+WEIGHTS_FILE_2 = 'darknet/weights/yolov3_final.weights'
 
 
 def load_model():
